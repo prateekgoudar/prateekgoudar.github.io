@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prateek Gaddigoudar — Senior Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #e50914;
+  --red-dim: #8b0000;
+  --bg: #0f0f0f;
+  --bg2: #161616;
+  --bg3: #1e1e1e;
+  --bg4: #242424;
+  --text: #f0f0f0;
+  --text2: #a0a0a0;
+  --text3: #606060;
+  --green: #46d369;
+  --border: rgba(255,255,255,0.07);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red-dim); border-radius: 2px; }
+
+/* ─── PROFILE SELECT ─── */
+#profile-select {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3rem;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+#profile-select.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.ps-logo {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  color: var(--red);
+  letter-spacing: 4px;
+}
+
+.ps-title {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+
+.ps-grid {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ps-card {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+.ps-card:hover { transform: translateY(-6px); }
+.ps-card:hover .ps-icon { border-color: var(--text); }
+.ps-card:hover .ps-label { color: var(--text); }
+
+.ps-icon {
+  width: 100px; height: 100px;
+  border-radius: 6px;
+  border: 2px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem;
+  transition: border-color 0.25s, background 0.25s;
+}
+.ps-icon.recruiter { background: linear-gradient(135deg, #0a1628, #1a3a6b); }
+.ps-icon.colleague { background: linear-gradient(135deg, #0a1e0a, #1e4a1e); }
+.ps-icon.guest    { background: linear-gradient(135deg, #1e0a0a, #4a1e1e); }
+
+.ps-label {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text2);
+  letter-spacing: 0.05em;
+  transition: color 0.25s;
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ─── MAIN ─── */
+#main { opacity: 0; transition: opacity 0.8s ease; }
+#main.visible { opacity: 1; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 3rem;
+  height: 64px;
+  display: flex; align-items: center; gap: 2.5rem;
+  background: linear-gradient(to bottom, rgba(15,15,15,0.97) 0%, rgba(15,15,15,0) 100%);
+  transition: background 0.3s;
+}
+nav.solid { background: rgba(15,15,15,0.97); }
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--red);
+  letter-spacing: 3px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex; gap: 1.5rem;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+
+.nav-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 1rem;
+}
+
+.profile-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  color: var(--text2);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.profile-badge:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+.profile-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink:0;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex; align-items: flex-end;
+  padding: 0 3rem 4rem;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 70% 40%, rgba(229,9,20,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 80% at 20% 80%, rgba(24,24,80,0.3) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0a0a 0%, var(--bg) 100%);
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.5) 70%, transparent 100%);
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--red);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 24px; height: 1px; background: var(--red);
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 10vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: 2px;
+  margin-bottom: 0.3rem;
+}
+.hero-name span { color: var(--red); }
+
+.hero-title-line {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 2rem;
+}
+.hero-desc strong { color: var(--text); font-weight: 500; }
+
+.hero-tags {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem;
+}
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text3);
+  background: rgba(255,255,255,0.03);
+  transition: all 0.2s;
+}
+.hero-tag:hover { border-color: var(--red); color: var(--red); background: rgba(229,9,20,0.05); }
+
+.hero-btns { display: flex; gap: 12px; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--text);
+  color: #000;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-primary:hover { background: #ccc; transform: scale(1.02); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 10px 24px;
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+/* ─── STATS TICKER ─── */
+.stats-bar {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0 3rem;
+  display: flex;
+  overflow-x: auto;
+}
+.stats-bar::-webkit-scrollbar { display: none; }
+
+.stat-item {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.2rem 2rem;
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.stat-item:first-child { padding-left: 0; }
+
+.stat-val {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+.stat-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* ─── SECTIONS ─── */
+.section {
+  padding: 4rem 3rem;
+}
+.section-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+.section-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ─── EXPERIENCE TIMELINE ─── */
+.exp-list { display: flex; flex-direction: column; gap: 0; }
+
+.exp-item {
+  display: grid;
+  grid-template-columns: 200px 1px 1fr;
+  gap: 0 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.exp-item.visible { opacity: 1; transform: none; }
+
+.exp-meta { text-align: right; }
+
+.exp-company {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.exp-dates {
+  font-size: 0.75rem;
+  color: var(--text3);
+  font-weight: 300;
+  margin-bottom: 4px;
+}
+.exp-loc {
+  font-size: 0.72rem;
+  color: var(--text3);
+}
+
+.exp-line {
+  position: relative;
+  background: var(--border);
+  width: 1px;
+}
+.exp-line::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 50%;
+  transform: translateX(-50%);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--red);
+  background: var(--bg);
+}
+.exp-item.current .exp-line::before {
+  background: var(--red);
+  box-shadow: 0 0 10px var(--red);
+}
+
+.exp-body {}
+.exp-role {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.exp-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text3);
+  font-style: italic;
+  margin-bottom: 0.8rem;
+}
+.exp-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.exp-bullets li {
+  font-size: 0.83rem;
+  color: var(--text2);
+  padding-left: 1.2rem;
+  position: relative;
+  font-weight: 300;
+  line-height: 1.5;
+}
+.exp-bullets li::before {
+  content: '▸';
+  position: absolute; left: 0;
+  color: var(--red);
+  font-size: 0.7rem;
+  top: 2px;
+}
+.exp-bullets li strong { color: var(--text); font-weight: 500; }
+
+.exp-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--red);
+  color: #fff;
+  border-radius: 2px;
+  margin-bottom: 6px;
+}
+
+/* ─── PROJECTS CAROUSEL ─── */
+.carousel-outer {
+  position: relative;
+  margin: 0 -3rem;
+  padding: 0 3rem;
+}
+
+.carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.carousel::-webkit-scrollbar { height: 3px; }
+.carousel::-webkit-scrollbar-track { background: var(--bg3); }
+.carousel::-webkit-scrollbar-thumb { background: var(--red-dim); border-radius: 2px; }
+
+.proj-card {
+  flex: 0 0 220px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: transform 0.25s ease, border-color 0.25s;
+  position: relative;
+}
+.proj-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255,255,255,0.15);
+  z-index: 5;
+}
+.proj-card:hover .proj-overlay { opacity: 1; }
+
+.proj-thumb {
+  height: 110px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+}
+.proj-thumb-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+  padding: 12px 10px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text2);
+  letter-spacing: 0.06em;
+}
+.proj-body { padding: 10px 12px 14px; }
+.proj-match { color: var(--green); font-size: 0.7rem; font-weight: 500; }
+.proj-type { color: var(--text3); font-size: 0.62rem; margin-left: 6px; }
+.proj-name { font-size: 0.85rem; font-weight: 600; color: var(--text); margin: 4px 0; }
+.proj-desc { font-size: 0.65rem; color: var(--text3); line-height: 1.5; font-weight: 300; }
+.proj-lang { font-size: 0.6rem; color: var(--text3); margin-top: 6px; }
+.proj-lang span { color: #f59e0b; }
+.proj-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.7);
+  opacity: 0; transition: opacity 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.proj-play {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  color: #000;
+}
+
+/* ─── SKILLS ─── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skill-group {
+  background: var(--bg2);
+  padding: 1.5rem;
+}
+.skill-group-title {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.skill-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text2);
+  transition: all 0.2s;
+  cursor: default;
+}
+.skill-pill:hover { background: rgba(229,9,20,0.08); border-color: rgba(229,9,20,0.3); color: var(--red); }
+
+/* ─── CURRENTLY LOADING ─── */
+.loading-list { display: flex; flex-direction: column; gap: 1rem; }
+.loading-item {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+.loading-name {
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.loading-bar-bg {
+  height: 3px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loading-bar-fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+.loading-pct {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text3);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ─── CONTACT ─── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.contact-lead {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+.contact-lead span { color: var(--red); }
+
+.contact-sub {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.contact-links { display: flex; flex-direction: column; gap: 12px; }
+.contact-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.contact-link:hover { border-color: var(--red); color: var(--text); background: rgba(229,9,20,0.04); }
+.contact-link .icon { font-size: 1rem; flex-shrink: 0; }
+.contact-link .cl-label { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text3); margin-left: auto; letter-spacing: 0.08em; }
+
+/* ─── CONTEXTUAL ─── */
+.ctx-card {
+  flex: 0 0 200px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s;
+  position: relative;
+  scroll-snap-align: start;
+}
+.ctx-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); }
+.ctx-thumb {
+  height: 90px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  position: relative;
+}
+.ctx-body { padding: 10px 12px 12px; }
+.ctx-match { color: var(--green); font-size: 0.7rem; font-weight: 500; }
+.ctx-name { font-size: 0.82rem; font-weight: 600; color: var(--text); margin: 3px 0; }
+.ctx-sub { font-size: 0.63rem; color: var(--text3); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--red);
+  letter-spacing: 3px;
+}
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+}
+.footer-quote {
+  font-size: 0.75rem;
+  color: var(--text3);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 0 1.5rem 3rem; }
+  .section { padding: 3rem 1.5rem; }
+  .stats-bar { padding: 0 1.5rem; }
+  .carousel-outer { margin: 0 -1.5rem; padding: 0 1.5rem; }
+  .exp-item { grid-template-columns: 1fr; }
+  .exp-meta { text-align: left; }
+  .exp-line { display: none; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .loading-item { grid-template-columns: 120px 1fr auto; }
+  footer { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ PROFILE SELECT ═══ -->
+<div id="profile-select">
+  <div class="ps-logo">PRATEEK.DEV</div>
+  <div class="ps-title">Who's watching?</div>
+  <div class="ps-grid">
+    <div class="ps-card" onclick="selectProfile('recruiter')">
+      <div class="ps-icon recruiter">💼</div>
+      <div class="ps-label">Recruiter</div>
+    </div>
+    <div class="ps-card" onclick="selectProfile('colleague')">
+      <div class="ps-icon colleague">🧑‍💻</div>
+      <div class="ps-label">Colleague</div>
+    </div>
+    <div class="ps-card" onclick="selectProfile('guest')">
+      <div class="ps-icon guest">👋</div>
+      <div class="ps-label">Just Browsing</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN SITE ═══ -->
+<div id="main">
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">PG</a>
+    <ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="profile-badge" onclick="resetProfile()">
+        <div class="dot"></div>
+        <span id="profile-badge-text">Recruiter Mode</span>
+        <span style="color:var(--text3);">↺</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Now Streaming · Senior Software Engineer</div>
+      <h1 class="hero-name">PRATEEK<br><span>GADDIGOUDAR</span></h1>
+      <div class="hero-title-line" id="hero-title-line">7+ YRS · EMBEDDED SYSTEMS · SAFETY-CRITICAL SOFTWARE</div>
+      <p class="hero-desc" id="hero-desc">
+        Senior Embedded Software Engineer building software for systems that <strong>can't afford to crash</strong>. Currently at Smith+Nephew shipping Qt/QML surgical navigation UI on <strong>NVIDIA Jetson Orin</strong> at sub-100ms latency.
+      </p>
+      <div class="hero-tags">
+        <div class="hero-tag">C / C++ (11/14/17)</div>
+        <div class="hero-tag">Embedded Linux</div>
+        <div class="hero-tag">Qt / QML</div>
+        <div class="hero-tag">NVIDIA Jetson Orin</div>
+        <div class="hero-tag">Medical Devices</div>
+        <div class="hero-tag">IEC 61850</div>
+        <div class="hero-tag">Real-Time Systems</div>
+        <div class="hero-tag">CMU MS ECE</div>
+      </div>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-primary">▶ &nbsp;Let's Connect</a>
+        <a href="#experience" class="btn-secondary">ℹ &nbsp;View Experience</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-val">7+</div>
+      <div class="stat-lbl">Years of<br>Experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">60+</div>
+      <div class="stat-lbl">Defects<br>Squashed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">~70%</div>
+      <div class="stat-lbl">Code<br>Deduplication</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">250+</div>
+      <div class="stat-lbl">Code<br>Reviews</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">100%</div>
+      <div class="stat-lbl">Security<br>Scan Pass Rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">30+</div>
+      <div class="stat-lbl">Agile<br>Sprints Led</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">350+</div>
+      <div class="stat-lbl">MISRA C<br>Violations Fixed</div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <div class="section-header">
+      <div class="section-title">CAREER EPISODES</div>
+      <div class="section-subtitle">In Chronological Order</div>
+    </div>
+
+    <div class="exp-list">
+
+      <!-- Smith+Nephew -->
+      <div class="exp-item current">
+        <div class="exp-meta">
+          <div class="exp-company">Smith+Nephew</div>
+          <div class="exp-dates">Sept 2025 – Present</div>
+          <div class="exp-loc">Andover, MA</div>
+        </div>
+        <div class="exp-line"></div>
+        <div class="exp-body">
+          <div class="exp-badge">Now Streaming</div>
+          <div class="exp-role">R&D Engineer II · Medical Devices</div>
+          <div class="exp-tagline">// surgical robots, real-time UIs, and latency you can't negotiate on</div>
+          <ul class="exp-bullets">
+            <li>Lead design and development of <strong>Qt/QML UI</strong> for surgical navigation systems on <strong>NVIDIA Jetson Orin</strong>, supporting 10+ real-time sensor and imaging feeds at <strong>sub-100ms latency</strong></li>
+            <li>Architected reusable UI components and automation frameworks reducing development effort by <strong>~30%</strong> across product variants while maintaining regulatory requirements</li>
+            <li>Serving as <strong>Scrum Master</strong> for a 10-member cross-functional team — the company's first Agile adoption — boosting delivery alignment by <strong>~20%</strong> across 6+ sprints</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Doble -->
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-company">Doble Engineering</div>
+          <div class="exp-dates">Nov 2021 – Sept 2025</div>
+          <div class="exp-loc">Marlborough, MA</div>
+        </div>
+        <div class="exp-line"></div>
+        <div class="exp-body">
+          <div class="exp-role">Software Engineer II · High-Voltage Test Equipment</div>
+          <div class="exp-tagline">// four seasons of firmware, protocols, and defects that tried (and failed) to hide</div>
+          <ul class="exp-bullets">
+            <li>Led end-to-end <strong>HDLIO firmware bring-up</strong>, doubling I/O channels (4→8), production-ready in <strong>10 weeks</strong> with EEPROM config, register mapping, and automated JSON testing</li>
+            <li>Spearheaded <strong>Medium Voltage Amplifier (MVA)</strong> firmware in 6 weeks, enabling 300V output by extending the VAMP architecture</li>
+            <li>Designed <strong>C++ APIs</strong> for command-line parsing, connection handling, and session management — cutting code duplication by <strong>~70%</strong> (~500 lines) and test execution time by <strong>30%</strong></li>
+            <li>Resolved <strong>60+ defects</strong> using GDB and Valgrind, cutting post-release escape defects by <strong>50%</strong></li>
+            <li>Remediated <strong>20+ Snyk security issues</strong>, raising security-scan pass rate from <strong>70% → 100%</strong> via Veracode validation</li>
+            <li>Debugged <strong>30+ IEC 61850</strong> protocol issues (GOOSE messaging + Sampled Values) with Wireshark and tcpdump</li>
+            <li>Led <strong>30+ Agile sprints</strong> as Scrum Master; conducted <strong>250+ code reviews</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CMU -->
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-company">Carnegie Mellon Univ.</div>
+          <div class="exp-dates">Apr – Nov 2021</div>
+          <div class="exp-loc">Pittsburgh, PA</div>
+        </div>
+        <div class="exp-line"></div>
+        <div class="exp-body">
+          <div class="exp-role">CV & Deep Learning Intern · Robotics Institute</div>
+          <div class="exp-tagline">// the research arc: Bayesian deep learning meets surgical robots</div>
+          <ul class="exp-bullets">
+            <li>Achieved <strong>85% accuracy</strong> in ultrasound semantic segmentation using Bayesian Deep Learning to facilitate surgical robot control in the Biomedical Image Guidance Lab</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bosch -->
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-company">Bosch Global SW</div>
+          <div class="exp-dates">July 2017 – June 2019</div>
+          <div class="exp-loc">Bengaluru, India</div>
+        </div>
+        <div class="exp-line"></div>
+        <div class="exp-body">
+          <div class="exp-role">Associate Software Engineer · Automotive</div>
+          <div class="exp-tagline">// origin story: AUTOSAR, CAN buses, and 350 MISRA violations</div>
+          <ul class="exp-bullets">
+            <li>Resolved <strong>350+ MISRA C violations</strong> using PC-Lint and Jenkins-integrated static analysis, boosting code quality by <strong>30%</strong></li>
+            <li>Developed <strong>120+ diagnostic features</strong> for Engine Control Modules in C and XML over CAN, FlexRay, and Ethernet within AUTOSAR frameworks</li>
+            <li>Recognized as <strong>top-performing fresher</strong> among ~1,000 engineers</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section-header">
+      <div class="section-title">GITHUB PROJECTS</div>
+      <div class="section-subtitle">Side quests from the CMU research arc</div>
+    </div>
+    <div class="carousel-outer">
+      <div class="carousel">
+        <a href="https://github.com/prateekgoudar/Semi-supervised-Deep-Geometric-learning-for-COVID-19-Regional-Severity-Classification" target="_blank" style="text-decoration:none;">
+          <div class="proj-card">
+            <div class="proj-thumb" style="background:linear-gradient(135deg,#1a0a1a,#2a1a3a);">🫁
+              <div class="proj-thumb-label">Deep Learning · Medical Imaging</div>
+            </div>
+            <div class="proj-body">
+              <div><span class="proj-match">97% Match</span><span class="proj-type">Research</span></div>
+              <div class="proj-name">COVID-19 Severity Classifier</div>
+              <div class="proj-desc">Semi-supervised deep geometric learning for CT scan regional severity classification using graph neural networks.</div>
+              <div class="proj-lang">Language: <span>Jupyter Notebook</span></div>
+            </div>
+            <div class="proj-overlay"><div class="proj-play">→</div></div>
+          </div>
+        </a>
+
+        <a href="https://github.com/prateekgoudar/Muscial-User-Preferrence-" target="_blank" style="text-decoration:none;">
+          <div class="proj-card">
+            <div class="proj-thumb" style="background:linear-gradient(135deg,#0a1a0a,#1a3a1a);">🎵
+              <div class="proj-thumb-label">Machine Learning · Recommendations</div>
+            </div>
+            <div class="proj-body">
+              <div><span class="proj-match">94% Match</span><span class="proj-type">ML</span></div>
+              <div class="proj-name">Musical User Preference</div>
+              <div class="proj-desc">Predicting user music taste through machine learning signal analysis and preference modelling.</div>
+              <div class="proj-lang">Language: <span>Python</span></div>
+            </div>
+            <div class="proj-overlay"><div class="proj-play">→</div></div>
+          </div>
+        </a>
+
+        <a href="https://github.com/prateekgoudar/18898-GSP-2020" target="_blank" style="text-decoration:none;">
+          <div class="proj-card">
+            <div class="proj-thumb" style="background:linear-gradient(135deg,#0a0a1a,#1a1a3a);">📊
+              <div class="proj-thumb-label">Signal Processing · Graph Theory</div>
+            </div>
+            <div class="proj-body">
+              <div><span class="proj-match">91% Match</span><span class="proj-type">Signal Processing</span></div>
+              <div class="proj-name">CMU GSP 18-898</div>
+              <div class="proj-desc">Graph Signal Processing implementations from Carnegie Mellon graduate coursework. Signals on graph-structured data.</div>
+              <div class="proj-lang">Language: <span>Python</span></div>
+            </div>
+            <div class="proj-overlay"><div class="proj-play">→</div></div>
+          </div>
+        </a>
+
+        <div class="proj-card" style="border-style:dashed; display:flex; align-items:center; justify-content:center; min-height:200px;">
+          <div style="text-align:center; padding:1rem;">
+            <div style="font-size:1.5rem; margin-bottom:8px;">+</div>
+            <div style="font-size:0.72rem; color:var(--text3); font-family:var(--font-mono);">More coming soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXTUAL SECTION -->
+  <section class="section" id="contextual">
+    <div class="section-header">
+      <div class="section-title" id="ctx-title">RECRUITER PICKS</div>
+      <div class="section-subtitle" id="ctx-sub">Curated for you</div>
+    </div>
+    <div class="carousel-outer">
+      <div class="carousel" id="ctx-carousel"></div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="section-header">
+      <div class="section-title">TECH STACK</div>
+      <div class="section-subtitle">Hover to highlight</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">Systems Programming</div>
+        <div class="skill-pills">
+          <div class="skill-pill">C</div>
+          <div class="skill-pill">C++ 11/14/17</div>
+          <div class="skill-pill">Python</div>
+          <div class="skill-pill">Multithreading</div>
+          <div class="skill-pill">IPC</div>
+          <div class="skill-pill">Memory Management</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Embedded Platforms</div>
+        <div class="skill-pills">
+          <div class="skill-pill">NVIDIA Jetson Orin</div>
+          <div class="skill-pill">Embedded Linux</div>
+          <div class="skill-pill">RTOS</div>
+          <div class="skill-pill">GPIO</div>
+          <div class="skill-pill">SPI / I2C / UART</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">UI & Frameworks</div>
+        <div class="skill-pills">
+          <div class="skill-pill">Qt / QML</div>
+          <div class="skill-pill">Real-Time Rendering</div>
+          <div class="skill-pill">AUTOSAR</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Networking & Protocols</div>
+        <div class="skill-pills">
+          <div class="skill-pill">TCP/IP</div>
+          <div class="skill-pill">IEC 61850</div>
+          <div class="skill-pill">GOOSE / SV</div>
+          <div class="skill-pill">CAN / FlexRay</div>
+          <div class="skill-pill">Ethernet Sockets</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Debugging & Quality</div>
+        <div class="skill-pills">
+          <div class="skill-pill">GDB</div>
+          <div class="skill-pill">Valgrind</div>
+          <div class="skill-pill">Wireshark</div>
+          <div class="skill-pill">tcpdump</div>
+          <div class="skill-pill">CANalyzer</div>
+          <div class="skill-pill">MISRA C</div>
+          <div class="skill-pill">clang-tidy</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Security & DevOps</div>
+        <div class="skill-pills">
+          <div class="skill-pill">Veracode</div>
+          <div class="skill-pill">Snyk</div>
+          <div class="skill-pill">Jenkins</div>
+          <div class="skill-pill">GitHub / GitLab</div>
+          <div class="skill-pill">Jira / Confluence</div>
+          <div class="skill-pill">CVE Remediation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRENTLY LOADING -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">CURRENTLY LOADING</div>
+      <div class="section-subtitle">Episodes still in production</div>
+    </div>
+    <div class="loading-list">
+      <div class="loading-item">
+        <div class="loading-name">Yocto / OpenEmbedded</div>
+        <div class="loading-bar-bg"><div class="loading-bar-fill" style="width:80%"></div></div>
+        <div class="loading-pct">80%</div>
+      </div>
+      <div class="loading-item">
+        <div class="loading-name">CUDA on Jetson Orin</div>
+        <div class="loading-bar-bg"><div class="loading-bar-fill" style="width:60%"></div></div>
+        <div class="loading-pct">60%</div>
+      </div>
+      <div class="loading-item">
+        <div class="loading-name">IEC 62443 Security Std</div>
+        <div class="loading-bar-bg"><div class="loading-bar-fill" style="width:45%"></div></div>
+        <div class="loading-pct">45%</div>
+      </div>
+      <div class="loading-item">
+        <div class="loading-name">Rust for Embedded</div>
+        <div class="loading-bar-bg"><div class="loading-bar-fill" style="width:35%"></div></div>
+        <div class="loading-pct">35%</div>
+      </div>
+      <div class="loading-item">
+        <div class="loading-name">Azure IoT Edge</div>
+        <div class="loading-bar-bg"><div class="loading-bar-fill" style="width:25%"></div></div>
+        <div class="loading-pct">25%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="contact-grid">
+      <div>
+        <div class="contact-lead">LET'S<br><span>CONNECT</span></div>
+        <p class="contact-sub" id="contact-sub">
+          Whether you're hiring for embedded systems roles, want to talk shop about real-time Linux or IEC 61850, or just want to say hi — my inbox is open.
+        </p>
+        <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text3);letter-spacing:0.08em;">
+          📍 Marlborough, MA &nbsp;·&nbsp; 📞 (412) 519-9937
+        </div>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:prateekgoudar@gmail.com" class="contact-link">
+          <span class="icon">✉️</span>
+          <span>prateekgoudar@gmail.com</span>
+          <span class="cl-label">Email</span>
+        </a>
+        <a href="https://linkedin.com/in/prateekgoudar" target="_blank" class="contact-link">
+          <span class="icon">🔗</span>
+          <span>linkedin.com/in/prateekgoudar</span>
+          <span class="cl-label">LinkedIn</span>
+        </a>
+        <a href="https://github.com/prateekgoudar" target="_blank" class="contact-link">
+          <span class="icon">⚙️</span>
+          <span>github.com/prateekgoudar</span>
+          <span class="cl-label">GitHub</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="icon">📄</span>
+          <span>Download Resume (PDF)</span>
+          <span class="cl-label">Resume</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">PG</div>
+    <div class="footer-quote">"The best embedded system is the one that never pages the on-call engineer."</div>
+    <div class="footer-copy">© 2025 Prateek Gaddigoudar · Built with C++, zero memory leaks, and CMU grit</div>
+  </footer>
+
+</div><!-- /main -->
+
+<script>
+const profiles = {
+  recruiter: {
+    badge: '💼 Recruiter Mode',
+    heroTitle: '7+ YRS · EMBEDDED SYSTEMS · SAFETY-CRITICAL SOFTWARE',
+    heroDesc: `Senior Embedded Software Engineer with 7+ years building software for systems that <strong>can't afford to crash</strong>. Currently at Smith+Nephew shipping Qt/QML surgical navigation UI on <strong>NVIDIA Jetson Orin</strong> at sub-100ms latency. Security scan rate: 70% → 100%.`,
+    ctxTitle: 'RECRUITER PICKS',
+    ctxSub: 'Key signals for hiring decisions',
+    contactSub: 'Open to senior IC and tech lead roles in embedded systems, medical devices, and safety-critical software. Based in Marlborough, MA. Let\'s talk.',
+    ctx: [
+      { emoji:'📄', bg:'#0d1b2a', name:'Download Resume', sub:'PDF · Updated 2025', match:'Start Here' },
+      { emoji:'🏥', bg:'#2a0a0a', name:'Medical Device SW', sub:'Jetson Orin, sub-100ms', match:'High Value' },
+      { emoji:'⚡', bg:'#0a1a2e', name:'Firmware Track Record', sub:'0→production in 10 wks', match:'Proven' },
+      { emoji:'🔒', bg:'#1a2a0a', name:'Security: 70%→100%', sub:'Veracode, Snyk, CVEs', match:'Compliance Ready' },
+      { emoji:'🎓', bg:'#2a1a2a', name:'CMU MS ECE', sub:'Embedded Systems & Robotics', match:'Pedigree' },
+    ]
+  },
+  colleague: {
+    badge: '🧑‍💻 Colleague Mode',
+    heroTitle: 'C++ · EMBEDDED LINUX · REAL-TIME SYSTEMS',
+    heroDesc: `Fellow embedded engineer. I've done firmware bring-up, <strong>IEC 61850 GOOSE/SV protocols</strong>, Qt/QML on Jetson Orin, and too many hours with GDB and Wireshark. If you're working on embedded Linux or industrial comms — I'm probably interested.`,
+    ctxTitle: 'COLLEAGUE PICKS',
+    ctxSub: 'War stories and nerd bait',
+    contactSub: 'Let\'s talk firmware, protocol debugging, or real-time rendering. I code-review for fun. Ping me if you want to geek out over IEC 61850 or Qt performance on Jetson.',
+    ctx: [
+      { emoji:'🐛', bg:'#1a0a0a', name:'GDB War Stories', sub:'60+ defects, Valgrind-clean', match:'Kindred Spirit' },
+      { emoji:'📡', bg:'#0a1a2e', name:'IEC 61850 / GOOSE', sub:'30+ protocol issues debugged', match:'Rare Expertise' },
+      { emoji:'🔧', bg:'#1a2a0a', name:'Firmware Bring-Up', sub:'HDLIO, MVA, EEPROM configs', match:'Ask Me Anything' },
+      { emoji:'📋', bg:'#2a1a0a', name:'Code Reviews', sub:'250+ reviews, enforced standards', match:'I\'ll Be Honest' },
+      { emoji:'⚡', bg:'#1a1a2a', name:'Qt/QML on Jetson', sub:'Real-time sensor feeds', match:'Let\'s Talk' },
+    ]
+  },
+  guest: {
+    badge: '👋 Guest Mode',
+    heroTitle: 'CMU GRAD · MARLBOROUGH, MA · WELCOME',
+    heroDesc: `Hey! I'm Prateek — I build software for things that really <strong>can't crash</strong>: surgical robots, high-voltage test gear, engine control modules. CMU-trained, Bosch-hardened, now at Smith+Nephew. Scroll around — it's a fun ride.`,
+    ctxTitle: 'TRENDING',
+    ctxSub: 'Most visited on this profile',
+    contactSub: 'Just want to say hi? Spotted something interesting on the site? My inbox is always open. I reply quickly.',
+    ctx: [
+      { emoji:'🏥', bg:'#2a0a0a', name:'Surgical Robot UI', sub:'Real-time, Jetson Orin', match:'Fan Favourite' },
+      { emoji:'⚡', bg:'#0a1a2e', name:'High-Voltage Firmware', sub:'Doble Engineering', match:'Crowd Pleaser' },
+      { emoji:'🚗', bg:'#2a2a0a', name:'Automotive at Bosch', sub:'MISRA C, AUTOSAR', match:'Origin Story' },
+      { emoji:'🤖', bg:'#0a0a2a', name:'CMU Research', sub:'Surgical robots + CV', match:'Plot Twist' },
+    ]
+  }
+};
+
+let currentProfile = null;
+
+function selectProfile(type) {
+  currentProfile = type;
+  const data = profiles[type];
+  document.getElementById('profile-badge-text').textContent = data.badge;
+  document.getElementById('hero-title-line').textContent = data.heroTitle;
+  document.getElementById('hero-desc').innerHTML = data.heroDesc;
+  document.getElementById('ctx-title').textContent = data.ctxTitle;
+  document.getElementById('ctx-sub').textContent = data.ctxSub;
+  document.getElementById('contact-sub').textContent = data.contactSub;
+
+  const carousel = document.getElementById('ctx-carousel');
+  carousel.innerHTML = '';
+  data.ctx.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'ctx-card';
+    el.innerHTML = `
+      <div class="ctx-thumb" style="background:linear-gradient(135deg,${c.bg},#161616);">${c.emoji}</div>
+      <div class="ctx-body">
+        <div class="ctx-match">${c.match}</div>
+        <div class="ctx-name">${c.name}</div>
+        <div class="ctx-sub">${c.sub}</div>
+      </div>`;
+    carousel.appendChild(el);
+  });
+
+  document.getElementById('profile-select').classList.add('hidden');
+  const main = document.getElementById('main');
+  main.classList.add('visible');
+  setTimeout(() => setupScrollObserver(), 100);
+}
+
+function resetProfile() {
+  document.getElementById('profile-select').classList.remove('hidden');
+  document.getElementById('main').classList.remove('visible');
+}
+
+// Sticky nav
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('solid', window.scrollY > 80);
+});
+
+// Scroll-reveal for experience items
+function setupScrollObserver() {
+  const items = document.querySelectorAll('.exp-item');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  items.forEach(item => io.observe(item));
+}
+</script>
+</body>
+</html>
